@@ -8,53 +8,50 @@ import HomePage from './pages/HomePage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import RegisterPage from './pages/RegisterPage.tsx';
 import MapPage from './pages/MapPage.tsx';
+// <-- NOVO: Importar a página de usuário
+import UserPage from './pages/UserPage.tsx'; 
 import {ProtectedRoute} from './components/ProtectedRoute.tsx';
 
 import './index.css';
 
 const router = createBrowserRouter(
-  [
-    {
-      path: "/",
-      element: <App />, // O Layout (Header/Footer)
-      children: [
-        // --- ROTAS PÚBLICAS ---
-        // (Renderizadas dentro do <Outlet> do App)
-        { index: true, element: <HomePage /> }, // 'index: true' é o mesmo que 'path: "/"'
-        { path: "login", element: <LoginPage /> },
-        { path: "cadastro", element: <RegisterPage /> },
-        
-        // --- MUDANÇA PRINCIPAL AQUI ---
-        // Em vez de "envelopar" a rota, criamos um "Grupo de Layout"
-        // que usa o ProtectedRoute.
-        {
-          element: <ProtectedRoute />, // 1. O "Segurança" é o layout...
-          children: [
-            // 2. ...e o <Outlet> dele vai renderizar estas rotas filhas:
-            { path: "mapa", element: <MapPage /> },
+ [
+ {
+ path: "/",
+element: <App />, // O Layout (Header/Footer)
+ children: [
+// --- ROTAS PÚBLICAS ---
+ { index: true, element: <HomePage /> },
+{ path: "login", element: <LoginPage /> },
+ { path: "cadastro", element: <RegisterPage /> },
+  
+
+ // --- ROTAS PROTEGIDAS ---
+ {
+element: <ProtectedRoute />, // Este layout (o "Segurança")
+ children: [
+// Rotas que só aparecem se o usuário estiver logado:
+ { path: "mapa", element: <MapPage /> },
+ { path: "perfil", element: <UserPage /> },
+            // <-- NOVO: Adicionar a rota de Perfil aqui
             
-            // Se você tiver mais rotas protegidas, adicione-as aqui:
-            // { path: "dashboard", element: <DashboardPage /> },
-            // { path: "meu-perfil", element: <PerfilPage /> },
-          ]
-        },
-        
-        // (Opcional: Adicionar Rota 404 aqui)
-        // { path: "*", element: <Pagina404 /> }
-      ],
-    },
-  ],
-  {
-    // Sua configuração de basename está perfeita, mantenha!
-    basename: "/recycle-me/", 
-  }
+]
+},
+ 
+ // Opcional: Rota 404
+ // { path: "*", element: <Pagina404 /> }
+ ],
+ },
+ ],
+ {
+ basename: "/recycle-me/", 
+ }
 );
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    {/* O AuthProvider abraçando tudo está PERFEITO! */}
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  </React.StrictMode>,
+ <React.StrictMode>
+ <AuthProvider>
+   <RouterProvider router={router} />
+ </AuthProvider>
+ </React.StrictMode>,
 );

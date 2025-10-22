@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import HashLink from './components/HashLink.tsx';
 import ScrollToTop from './components/ScrollToTop.tsx';
-import './App.css';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import UserPage from './pages/UserPage';
 
 // --- PASSO 1: IMPORTAR O useAuth ---
 import { useAuth } from './context/AuthContext'; // (Verifique o caminho se necessário)
@@ -100,11 +101,23 @@ function App() {
             </nav>
             <div className="flex items-center gap-4">
 
-              {/* --- PASSO 3.2: ÍCONE DE USUÁRIO/MAPA CONDICIONAL --- */}
-              {!isAuthenticated ? (
-                <Link to="/login" title="Acessar conta" className="text-2xl hover:text-brand-text-green transition-colors dark:text-gray-300 dark:hover:text-brand-green"><i className="fas fa-user-circle"></i></Link>
+              {/* --- ÍCONES CONDICIONAIS: LOGIN vs. MAPA + PERFIL --- */}
+              {isAuthenticated ? (
+                  <div className="flex items-center gap-4"> 
+                      {/* 1. Ícone do Mapa */}
+                      <Link to="/mapa" title="Acessar mapa" className="text-2xl hover:text-brand-text-green transition-colors dark:text-gray-300 dark:hover:text-brand-green">
+                          <i className="fas fa-map-marked-alt"></i>
+                      </Link>
+                      {/* 2. Ícone do PERFIL (O bonequinho que você pediu) */}
+                      <Link to="/perfil" title="Acessar perfil" className="text-2xl hover:text-brand-text-green transition-colors dark:text-gray-300 dark:hover:text-brand-green">
+                          <i className="fas fa-user-circle"></i>
+                      </Link>
+                  </div>
               ) : (
-                <Link to="/mapa" title="Acessar mapa" className="text-2xl hover:text-brand-text-green transition-colors dark:text-gray-300 dark:hover:text-brand-green"><i className="fas fa-map-marked-alt"></i></Link>
+                  // Se NÃO estiver logado, exibe apenas o link de Login (bonequinho)
+                  <Link to="/login" title="Acessar conta" className="text-2xl hover:text-brand-text-green transition-colors dark:text-gray-300 dark:hover:text-brand-green">
+                      <i className="fas fa-user-circle"></i>
+                  </Link>
               )}
 
               <button id="mobile-menu-button" onClick={toggleMobileMenu} className="md:hidden text-2xl dark:text-gray-300"><i className="fas fa-bars"></i></button>
